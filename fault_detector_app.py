@@ -10,6 +10,7 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, roc_auc_score, roc_curve
 from sklearn.pipeline import Pipeline
+import catboost
 
 
 # Load the trained laptop model
@@ -164,7 +165,12 @@ with st.expander("Laptop Model"):
     if st.button("Detect Laptop Fault"):
         laptop_features = pd.DataFrame([laptop_data])
         laptop_prediction = predict_laptop_fault(laptop_features)
-        st.write("Laptop Prediction:", laptop_prediction[0])
+        if laptop_prediction[0] == 1:
+            # Condition for "Faulty" prediction (1)
+            st.write('<div style="background-color: red; padding: 10px; border-radius: 5px; color: white;">Faulty</div>', unsafe_allow_html=True)
+        else:
+            # Condition for "Good" prediction (0)
+            st.write('<div style="background-color: green; padding: 10px; border-radius: 5px; color: white;">Good!</div>', unsafe_allow_html=True)
         
 # Section for Server Model
 with st.expander("Server Model"):
@@ -190,7 +196,12 @@ with st.expander("Server Model"):
     if st.button("Detect Server Fault"):
         server_features = pd.DataFrame([server_data])
         server_prediction = predict_server_fault(server_features)
-        st.write("Server Prediction:", server_prediction[0])
+        if server_prediction[0] == 1:
+            # Condition for "Faulty" prediction (1)
+            st.write('<div style="background-color: red; padding: 10px; border-radius: 5px; color: white;">Faulty</div>', unsafe_allow_html=True)
+        else:
+            # Condition for "Good" prediction (0)
+            st.write('<div style="background-color: green; padding: 10px; border-radius: 5px; color: white;">Good!</div>', unsafe_allow_html=True)
 
 
 # # Add some visualizations or decorations
