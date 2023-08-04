@@ -12,7 +12,7 @@ from sklearn.metrics import classification_report, roc_auc_score, roc_curve
 from sklearn.pipeline import Pipeline
 import catboost
 import os
-from dotenv import load_dotenv
+from creds import api_key
 import streamlit as st
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
@@ -22,8 +22,8 @@ from langchain.chains import LLMChain, SimpleSequentialChain
 #######Automatic Process##############
 ################################################
 
-load_dotenv()
-API_KEY = os.environ['OPENAI_API_KEY']
+
+API_KEY = api_key
 llm = OpenAI(openai_api_key=API_KEY)
 
 
