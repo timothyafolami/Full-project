@@ -11,7 +11,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, roc_auc_score, roc_curve
 from sklearn.pipeline import Pipeline
 import catboost
-from apikey import OPENAI_API_KEY
 import os
 from dotenv import load_dotenv
 import streamlit as st
