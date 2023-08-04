@@ -11,6 +11,21 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, roc_auc_score, roc_curve
 from sklearn.pipeline import Pipeline
 import catboost
+from apikey import OPENAI_API_KEY
+import os
+from dotenv import load_dotenv
+import streamlit as st
+from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain, SimpleSequentialChain
+
+################################################
+#######Automatic Process##############
+################################################
+
+load_dotenv()
+API_KEY = os.environ['OPENAI_API_KEY']
+llm = OpenAI(openai_api_key=API_KEY)
 
 
 # Load the trained laptop model
@@ -138,6 +153,26 @@ st.set_page_config(page_title='Fault Detection App', page_icon=':computer:', lay
 
 st.title("Fault Detection App")
 
+prompt_template = PromptTemplate(
+    template = "Describe an automatic procedure of doing this: {manual_process}",
+    input_variables = ['manual_process']
+)
+
+manual_chain = LLMChain(
+    llm = llm,
+    prompt = prompt_template,
+    verbose = True
+)
+
+
+with st.expander("Automatic Procedure"):
+    user_prompt = st.text_input("What is the manual process")
+
+    if st.button("Generate") and user_prompt:
+        with st.spinner("Generating..."):
+            output = manual_chain.run(manual_process=user_prompt)
+            st.write(output)
+
 # Section for Laptop Model
 with st.expander("Laptop Model"):
     st.write("This section is for detecting faults in laptops.")
@@ -204,28 +239,8 @@ with st.expander("Server Model"):
             st.write('<div style="background-color: green; padding: 10px; border-radius: 5px; color: white;">Good!</div>', unsafe_allow_html=True)
 
 
-# # Add some visualizations or decorations
-# st.header("Data Visualization")
-
-# # Visualize Laptop Data
-# st.subheader("Laptop Data")
-# st.write("Here's a sample visualization of laptop data.")
-# # Assuming laptop_df is your DataFrame containing laptop data
-# sns.barplot(x="Laptop Model", y="CPU Usage (%)", data=laptop_df)
-# st.pyplot()
-
-# # Visualize Server Data
-# st.subheader("Server Data")
-# st.write("Here's a sample visualization of server data.")
-# # Assuming server_df is your DataFrame containing server data
-# sns.barplot(x="Server Name", y="Memory Usage (%)", data=server_df)
-# st.pyplot()
-
-# Add any other decorations or animations as per your preference
-
-# You can also add a footer to your app
 st.markdown("---")
-st.write("Your app description or contact information can go here.")
+st.write("Automatic procedure generation, and fault detectors...")
 
 # Optionally, you can add a sidebar for additional options, if needed
 st.sidebar.title("Options")
@@ -233,24 +248,12 @@ st.sidebar.write("Add any additional options or information here.")
 
 # Run the Streamlit app
 if __name__ == '__main__':
-    # st.set_page_config(page_title='Fault Detection App', page_icon=':computer:', layout='wide')
-    # st.set_page_config(layout="wide")
-    # st.set_page_config(  # Customizing the app's layout
-    #     page_title="Fault Detection App",
-    #     page_icon=":computer:",
-    #     layout="wide"
-    # )
     st.sidebar.header("About")
     st.sidebar.info(
-        "This app detects faults in laptops and servers using pre-trained models. "
+        "This app is splitted into 3 sections, the first is that it generates automatic procedures of doing a manual process."
+        "The other aspects oftThis app detects faults in laptops and servers using pre-trained models. "
         "Provide the required information for each model and click the respective button to detect faults."
     )
 
-    # st.sidebar.header("Contact")
-    # st.sidebar.info(
-    #     "Created by [Your Name]\n"
-    #     "Email: [Your Email]\n"
-    #     "LinkedIn: [Your LinkedIn Profile]"
-    # )
 
     
