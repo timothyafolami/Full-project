@@ -10,22 +10,8 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, roc_auc_score, roc_curve
 from sklearn.pipeline import Pipeline
+# import catboost
 import catboost
-import os
-from creds import api_key
-import streamlit as st
-from langchain.llms import OpenAI
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SimpleSequentialChain
-
-################################################
-#######Automatic Process##############
-################################################
-
-
-API_KEY = api_key
-llm = OpenAI(openai_api_key=API_KEY)
-
 
 # Load the trained laptop model
 laptop_model = joblib.load('laptop_model.joblib')
@@ -145,32 +131,6 @@ def predict_server_fault(features):
     preprocess = preprocessor.transform(features)
     server_model = joblib.load('server_model.joblib')
     return server_model.predict(preprocess)
-
-# --------------------------
-# Streamlit app code
-st.set_page_config(page_title='Fault Detection App', page_icon=':computer:', layout='wide')
-
-st.title("Fault Detection App")
-
-prompt_template = PromptTemplate(
-    template = "Describe an automatic procedure of doing this: {manual_process}",
-    input_variables = ['manual_process']
-)
-
-manual_chain = LLMChain(
-    llm = llm,
-    prompt = prompt_template,
-    verbose = True
-)
-
-
-with st.expander("Automatic Procedure"):
-    user_prompt = st.text_input("What is the manual process")
-
-    if st.button("Generate") and user_prompt:
-        with st.spinner("Generating..."):
-            output = manual_chain.run(manual_process=user_prompt)
-            st.write(output)
 
 # Section for Laptop Model
 with st.expander("Laptop Model"):
