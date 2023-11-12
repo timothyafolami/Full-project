@@ -39,7 +39,14 @@ if prompt := st.chat_input(" "):
             ],
             stream=True,
         ):
-            full_response += response['choices'][0]['message']['content']
+            if response and 'choices' in response and len(response['choices']) > 0:
+                content = response['choices'][0].get('message', {}).get('content', '')
+                if isinstance(content, str):
+                    full_response += content
+                else:
+                    print("Content is not a string:", content)
+            else:
+                print("Invalid response structure:", response)
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
