@@ -1,11 +1,12 @@
 import streamlit as st
 from streamlit_chat import message
-from utils import get_initial_message, get_chatgpt_response, update_chat
-import os
+from utils import get_initial_message
 import openai
+from openai import OpenAI
 
 openai.api_key = st.secrets.OPENAI_API_KEY
 
+client = OpenAI()
 st.title("Schoolbot")
 
 # Introduction for Schoolbot
@@ -31,7 +32,7 @@ if prompt := st.chat_input(" "):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ''
-        for response in openai.chat.completions.create(
+        for response in client.chat.completions.create(
             model=st.session_state["openai_model"],
             messages=[
                 {"role": m["role"], "content": m["content"]}
