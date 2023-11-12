@@ -6,7 +6,7 @@ from openai import OpenAI
 
 openai.api_key = st.secrets.OPENAI_API_KEY
 
-client = OpenAI()
+client = OpenAI(api_key=st.secrets.OPENAI_API_KEY)
 st.title("Schoolbot")
 
 # Introduction for Schoolbot
@@ -41,9 +41,9 @@ if prompt := st.chat_input(" "):
             stream=True,
         )
         # getting response
-        content = response['choices'][0].text
+        content = response.choices[0].message.content
         full_response += content
 
         message_placeholder.markdown(full_response + "▌")
-        message_placeholder.markdown(full_response)
+        # message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
