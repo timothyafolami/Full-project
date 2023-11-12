@@ -32,22 +32,18 @@ if prompt := st.chat_input(" "):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ''
-        for response in client.chat.completions.create(
+        response = client.chat.completions.create(
             model=st.session_state["openai_model"],
             messages=[
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
             ],
             stream=True,
-        ):
-            if response and 'choices' in response and len(response['choices']) > 0:
-                content = response['choices'][0].text
-                if isinstance(content, str):
-                    full_response += content
-                else:
-                    print("Content is not a string:", content)
-            else:
-                print("Invalid response structure:", response)
-            message_placeholder.markdown(full_response + "▌")
+        )
+        # getting response
+        content = response['choices'][0].text
+        full_response += content
+
+        message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
