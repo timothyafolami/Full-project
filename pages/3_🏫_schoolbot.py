@@ -39,7 +39,7 @@ if prompt := st.chat_input(" "):
             ],
             stream=True,
         ):
-            full_response += response.choices[0].delta.get("content", "")
+            full_response += response['choices'][0]['message']['content']
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
