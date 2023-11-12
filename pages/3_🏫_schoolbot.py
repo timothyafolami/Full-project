@@ -40,7 +40,7 @@ if prompt := st.chat_input(" "):
             stream=True,
         ):
             if response and 'choices' in response and len(response['choices']) > 0:
-                content = response['choices'][0].get('message', {}).get('content', '')
+                content = response['choices'][0].text
                 if isinstance(content, str):
                     full_response += content
                 else:
