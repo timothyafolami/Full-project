@@ -4,12 +4,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import classification_report, roc_auc_score, roc_curve
-from sklearn.pipeline import Pipeline
 # import catboost
 import catboost
 class ServerDataPreprocessor:
