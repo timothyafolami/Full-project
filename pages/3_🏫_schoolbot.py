@@ -38,7 +38,6 @@ if prompt := st.chat_input(" "):
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages
             ],
-            stream=True,
         )
         # getting response
         content = response.choices[0].message.content
