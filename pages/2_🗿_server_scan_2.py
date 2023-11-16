@@ -81,8 +81,9 @@ with st.expander("Server Model"):
             result_df['Prediction'] = server_predictions
             result = result_df[result_df['Prediction'] == 1]
             result['Prediction_category'] = "Faulty"
+            output = result.drop(columns=['Prediction'])
         
-            st.dataframe(result.drop(columns=['Prediction']))
+            st.dataframe(output)
 
 
 st.markdown("---")
