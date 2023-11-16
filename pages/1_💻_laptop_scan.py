@@ -67,7 +67,7 @@ with st.expander("Laptop Fault Detection"):
             result_df['Prediction_category'] = result_df['Prediction'].apply(lambda x: "Faulty" if x == 1 else "Normal")
             output = result_df[result_df['Prediction']==1]
 
-            st.dataframe(output)
+            st.dataframe(output.drop(columns=['Prediction']))
     else:
         st.write("No data available for analysis.")
 
