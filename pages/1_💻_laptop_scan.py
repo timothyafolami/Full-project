@@ -65,6 +65,7 @@ with st.expander("Laptop Fault Detection"):
             result_df = laptop_data[['Laptop ID']].copy()
             result_df['Prediction'] = predictions
             result_df['Prediction_category'] = result_df['Prediction'].apply(lambda x: "Faulty" if x == 1 else "Normal")
+            output = result_df[result_df['Prediction']==1]
 
             st.dataframe(result_df)
     else:
