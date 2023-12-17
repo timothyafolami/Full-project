@@ -91,6 +91,6 @@ with st.expander("Real-time Data Analysis"):
 st.markdown("## Conclusion")
 st.write("This tool aids in IT preventative maintenance by analyzing and predicting potential faults in laptops and servers.")
 
-# End of Streamlit App
-if __name__ == '__main__':
-    st.sidebar.markdown("Developed by [Your Name/Organization]")
+# # End of Streamlit App
+# if __name__ == '__main__':
+#     st.sidebar.markdown("Developed by [Your Name/Organization]")
