@@ -83,7 +83,7 @@ with st.expander("Server Model"):
             result['Prediction_category'] = "Faulty"
             output = result.drop(columns=['Prediction'])
         
-            st.dataframe(output)
+            st.dataframe(output.reste_index(drop=True))
 
 
 st.markdown("---")
