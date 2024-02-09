@@ -45,7 +45,7 @@ def load_data_and_models():
 laptop_data, laptop_model = load_data_and_models()
 
 # Streamlit UI
-st.title("IT Preventative Maintenance")
+st.title("Laptop Preventative Maintenance")
 
 # Sidebar
 st.sidebar.title("Options")
@@ -59,7 +59,7 @@ with st.expander("Laptop Fault Detection"):
         if st.button("Scan Laptops"):
             laptop_df_x = laptop_data.drop(columns=['Laptop ID', 'Target'])
             preprocessor = LaptopDataPreprocessor()
-            X_preprocessed = preprocessor.fit_transform(laptop_df_x)
+            X_preprocessed = preprocessor.transform(laptop_df_x)
 
             predictions = laptop_model.predict(X_preprocessed)
             result_df = laptop_data[['Laptop ID']].copy()

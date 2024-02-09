@@ -1,7 +1,6 @@
 import streamlit as st
 import joblib
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 # import catboost
@@ -52,10 +51,6 @@ server_model = joblib.load('server_model.joblib')
 
 st.title("Predictive Monitoring")
 
-def dataframe_with_html(df):
-  return pd.DataFrame(df).style.apply(lambda row: [f'<div style="background-color: {"red" if x == 1 else "green"}; padding: 10px; border-radius: 5px; color: white;">{"Faulty" if x == 1 else "Good!"}</div>' for x in row['Prediction']], axis=1).to_html()
-
-# ...
 
 with st.expander("Server Model"):
     st.write("This section is for detecting faults in servers.")
@@ -86,6 +81,8 @@ with st.expander("Server Model"):
             output.reset_index(drop=True, inplace=True)
         
             st.dataframe(output)
+        else:
+            st.write("No data available for analysis.")
 
 
 st.markdown("---")
