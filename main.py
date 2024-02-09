@@ -2,12 +2,12 @@ import streamlit as st
 
 # Page configuration
 st.set_page_config(
-    page_title="AI BOTs",
-    page_icon="🤖",
+    page_title="Tech Fault Detection Suite",
+    page_icon="🔍",
 )
 
 # Main Page Title
-st.title("Welcome to Our Interactive Bot Platform!")
+st.title("Welcome to the Tech Fault Detection Suite!")
 
 # Sidebar
 st.sidebar.success("Select a page above.")
@@ -31,13 +31,13 @@ st.markdown("""
 """)
 
 # School Students Bot Introduction
-st.markdown("""
-    ## Hello, Students! Meet Your Academic Companion!
+# st.markdown("""
+#     ## Hello, Students! Meet Your Academic Companion!
 
-    Embark on a journey of seamless learning with our School Students Bot, your personal academic assistant. Designed to cater to curious minds, this bot is here to answer your study-related queries, help with homework, and offer educational support. It's not just about answering questions; it's about making learning interactive and fun. From collecting useful information to aiding in note-taking, this bot is your partner in academic success. Let's make learning an adventure together!
+#     Embark on a journey of seamless learning with our School Students Bot, your personal academic assistant. Designed to cater to curious minds, this bot is here to answer your study-related queries, help with homework, and offer educational support. It's not just about answering questions; it's about making learning interactive and fun. From collecting useful information to aiding in note-taking, this bot is your partner in academic success. Let's make learning an adventure together!
 
-    ---
-""")
+#     ---
+# """)
 
 # Business Automation Bot Introduction
 st.markdown("""
