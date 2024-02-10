@@ -1,87 +1,66 @@
 import streamlit as st
 import joblib
 import pandas as pd
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-# import catboost
-import catboost
-class ServerDataPreprocessor:
-    def __init__(self):
-        # Define the preprocessing steps
-        self.categorical_features = ['Server Status', 'Operating System', 'Server Location']
-        self.categorical_transformer = OneHotEncoder(drop='first')
 
-        self.numerical_features = ['Disk Usage (%)', 'CPU Usage (%)', 'Memory Usage (%)', 'Number of CPU Cores', 'RAM Capacity (GB)', 'Network Traffic (Mbps)', 'Disk I/O (IOPS)', 'Server Uptime (days)']
-        self.numerical_transformer = StandardScaler()
 
-        self.preprocessor = ColumnTransformer(
-            transformers=[
-                ('cat', self.categorical_transformer, self.categorical_features),
-                ('num', self.numerical_transformer, self.numerical_features)
-            ])
+# creating a function to preprocess the data
+def data_prep(df):
+    # load the preprocessor pipeline
+    preprocessor = joblib.load('server_preprocessor_pipeline.joblib')
+    # now preprocessing
+    X_preprocessed = preprocessor.transform(df)
+    # return the preprocessed data
+    return X_preprocessed
 
-    def fit_transform(self, df):
-        # Apply preprocessing to the data and fit the transformer
-        X_preprocessed = self.preprocessor.fit_transform(df)
-        return X_preprocessed
+# Function to load models and data
+def load_data_and_models():
+    try:
+        laptop_data = pd.read_csv("Server_log_data.csv")
+        laptop_model = joblib.load('server_model.joblib')
+        return laptop_data, laptop_model
+    except FileNotFoundError as e:
+        st.error(f"Error loading files: {e}")
+        return None, None
 
-    def transform(self, df):
-        # Apply preprocessing to the data (without fitting the transformer)
-        X_preprocessed = self.preprocessor.transform(df)
-        return X_preprocessed
+server_data, server_model = load_data_and_models()
 
-    def save(self, file_path):
-        # Save the preprocessor pipeline to a file
-        joblib.dump(self.preprocessor, file_path)
 
-    @staticmethod
-    def load(file_path):
-        # Load the preprocessor pipeline from a file
-        preprocessor = joblib.load(file_path)
-        preprocessor_instance = ServerDataPreprocessor()
-        preprocessor_instance.preprocessor = preprocessor
-        return preprocessor_instance
-
-def preprocess_data(df):
-    preprocessor = ServerDataPreprocessor.load('server_preprocessor_pipeline.joblib')
-    return preprocessor.transform(df)
-
-# Load the server model
-server_model = joblib.load('server_model.joblib')
-
+# Streamlit UI
 st.title("Predictive Monitoring")
 
+# Sidebar
+st.sidebar.title("Options")
+st.sidebar.write("Additional informations can come here.")
 
-with st.expander("Server Model"):
+with st.expander("Server Predictive Maintenance"):
+
     st.write("This section is for detecting faults in servers.")
     st.write("Provide the following information for multiple servers:")
 
-    # Load your server data into a DataFrame
-    server_df = pd.read_csv("Server_log_data.csv")
-    server_data = server_df.copy()  # Use a copy of your server data
-    st.dataframe(server_data.drop(columns=['Target']))
+    if server_data is not None:
 
-    # 
-    server_df_x = server_df.drop(columns=['Server ID', 'Server Name', 'Target'])
+        # displaying the data
+        st.dataframe(server_data.drop(columns=['Target']))
 
+        if st.button("Scan"):
+            # dropping some columns
+            server_df_x = server_data.drop(columns=['Server ID', 'Server Name', 'Target'])
 
-    if st.button("Scan"):
-        # Check if there is any data to process
-        if not server_data.empty:
-            X_preprocessed = preprocess_data(server_df_x)
+            # Check if there is any data to process
+            X_preprocessed = data_prep(server_df_x)
+            # model prediction
             server_predictions = server_model.predict(X_preprocessed)
 
             # Create a DataFrame to display predictions
-            result_df = server_df[['Server ID']].copy()
+            result_df = server_data[['Server ID']].copy()
             result_df['Prediction'] = server_predictions
             result = result_df[result_df['Prediction'] == 1]
             result['Prediction_category'] = "Faulty"
+            # preparing the result
             output = result.drop(columns=['Prediction'])
-            # resetting the index
-            output.reset_index(drop=True, inplace=True)
-        
+            # displaying the result
             st.dataframe(output)
-        else:
+    else:
             st.write("No data available for analysis.")
 
 
@@ -90,13 +69,9 @@ st.write("Automatic procedure generation, and fault detectors...")
 
 # Optionally, you can add a sidebar for additional options, if needed
 st.sidebar.title("Options")
-st.sidebar.write("Add any additional options or information here.")
+st.sidebar.write("This is a demo of how predictive maintenance can be used to detect faults in servers.")
 
-# Run the Streamlit app
-if __name__ == '__main__':
-    st.sidebar.header("About")
-    st.sidebar.info(
-        "This app is split into 3 sections, the first is that it generates automatic procedures of doing a manual process."
-        "The other aspects of this app detect faults in laptops and servers using pre-trained models. "
-        "Provide the required information for each model and click the respective button to detect faults."
-    )
+# Conclusion and additional notes
+st.markdown("## Conclusion")
+st.write("This tool aids in IT Predictive maintenance by analyzing and predicting potential faults in servers.")
+
