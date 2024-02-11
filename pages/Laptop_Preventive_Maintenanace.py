@@ -1,6 +1,8 @@
 import streamlit as st
 import joblib
 import pandas as pd
+import sklearn
+from sklearn.ensemble import RandomForestClassifier
 
 
 # creating a function to preprocess the data
