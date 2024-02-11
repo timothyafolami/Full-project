@@ -1,1 +1,2 @@
-./school-chatbot.py
+school-chatbot.py
+./__pycache__/
