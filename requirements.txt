@@ -5,3 +5,4 @@ python-dotenv>=1.0.0
 langchain>=0.0.249
 openai>=0.27.8
 streamlit-chat
+catboost>=1.0.0
